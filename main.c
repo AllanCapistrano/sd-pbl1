@@ -1,15 +1,17 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include <string.h> //Apagar
+#include <time.h>
 
 int main()
 {
+	// Iniciando a contagem do tempo de execução
+	clock_t begin = clock();
+	
     // Declarando variáveis
-    int size;
-    int **matrizA, **matrizB, **matrizC;
-//    char *temp, *temp2; //Apagar
-	char temp[500] = "", temp2[500] =""; //Apagar
-    int i, j, k, aux = 0;
+    long int **matrizA, **matrizB, **matrizC;
+    long int size, aux = 0;
+    double time_spent;
+	int i, j, k;
 	
 	// Declarando as variáveis ponteiro para os arquivos
     FILE *fp, *fp2;
@@ -18,34 +20,31 @@ int main()
     fp = fopen("matrizes.txt","r");
     
     // Lendo a quantidade de elementos por linha
-    fscanf(fp,"%d",&size);
-    printf("Matriz %dx%d\n\n", size, size);
+    fscanf(fp,"%ld",&size);
+    printf("Matriz %ldx%ld\n\n", size, size);
 
 	// Alocando dinamicamente o tamanho das matrizes
-	matrizA = malloc(size * sizeof(int*));
-	matrizB = malloc(size * sizeof(int*));
-	matrizC = malloc(size * sizeof(int*));
-	
-//	temp = malloc(size * sizeof(char*)); //Apagar
-//	temp2 = malloc(size * sizeof(char*)); //Apagar
+	matrizA = malloc(size * sizeof(long int*));
+	matrizB = malloc(size * sizeof(long int*));
+	matrizC = malloc(size * sizeof(long int*));
 	
 	for(i = 0; i < size; i++) {
-		matrizA[i] = malloc(size * sizeof(int));
-		matrizB[i] = malloc(size * sizeof(int));
-		matrizC[i] = malloc(size * sizeof(int));
+		matrizA[i] = malloc(size * sizeof(long int));
+		matrizB[i] = malloc(size * sizeof(long int));
+		matrizC[i] = malloc(size * sizeof(long int));
 	}
 	
 	// Lendo o arquivo e salvando os valores nas matrizes
 	while(!feof(fp)) {
 		for (i = 0; i < size; i++) {
 			for (j = 0; j < size; j++){
-				fscanf(fp, "%d", &matrizA[i][j]);
+				fscanf(fp, "%ld", &matrizA[i][j]);
 			}
 		}
 	
 		for (i = 0; i < size; i++) {
 			for (j = 0; j < size; j++){
-				fscanf(fp, "%d", &matrizB[i][j]);
+				fscanf(fp, "%ld", &matrizB[i][j]);
 			}
 		}
 	}
@@ -73,19 +72,10 @@ int main()
 	// Escrevendo no arquivo a matriz resultante
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {	
-//			fprintf(fp2, "%d ", matrizC[i][j]);	
-			
-			sprintf(temp, "%d ", matrizC[i][j]); //Apagar
-//			printf("\nTemp: %s\n", temp); //Apagar
-			strcat(temp2, temp); // Apagar
-			
+			fprintf(fp2, "%d ", matrizC[i][j]);
 		}
-//		printf("\nTemp2: %s\n", temp2); // Apagar
-		fprintf(fp2, "%s", temp2); //Apagar
 		
 		fprintf(fp2, "\n");
-		
-		sprintf(temp2, ""); //Apgar
 	}
 	
 	// Libera a memória da matriz
@@ -98,11 +88,18 @@ int main()
 	free (matrizA);
 	free (matrizB);
 	free (matrizC);
-//	free (temp); //Apagar
-//	free (temp2); //Apagar
 	
 	// Fechando o arquivo de escrita
 	fclose(fp2);
+	
+	// Finalizando a contagem do tempo de execução
+	clock_t end = clock();
+	
+	// Calculando o tempo de execução
+	time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+	
+	// Exibindo o tempo de execução
+	printf("\n%.2lf s\n", time_spent);
 	
     system ("pause");
     return 0;
