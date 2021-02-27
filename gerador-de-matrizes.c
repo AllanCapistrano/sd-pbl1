@@ -6,8 +6,8 @@ int main() {
 	setlocale(LC_ALL, "Portuguese");
 	
 	// Declarando variáveis
-	int size, limit;
-    int **matrizA, **matrizB;
+    long int **matrizA, **matrizB;
+    long int size, limit;
     int i, j;
     
     // Declarando a variável ponteiro para o arquivo
@@ -17,19 +17,19 @@ int main() {
     fp= fopen("matrizes.txt","w");
     
     printf("Digite qual será o maior número gerado: ");
-	scanf("%d", &limit);
+	scanf("%ld", &limit);
 	
 	printf("Digite a quantidade de elemento por linha: ");
-	scanf("%d", &size);
+	scanf("%ld", &size);
 	printf("\n");
 	
 	// Alocando dinamicamente o tamanho das matrizes
-	matrizA = malloc(size * sizeof(int*));
-	matrizB = malloc(size * sizeof(int*));
+	matrizA = malloc(size * sizeof(long int*));
+	matrizB = malloc(size * sizeof(long int*));
 	
 	for(i = 0; i < size; i++) {
-		matrizA[i] = malloc(size * sizeof(int));
-		matrizB[i] = malloc(size * sizeof(int));
+		matrizA[i] = malloc(size * sizeof(long int));
+		matrizB[i] = malloc(size * sizeof(long int));
 	}
 	
 	// Gerando os numéros aleatoriamente e salavndo nas matrizes
@@ -41,12 +41,12 @@ int main() {
 	}
 	
 	// Salvando no arquivo a quantidade de elementos por linha
-	fprintf(fp, "%d\n\n", size);
+	fprintf(fp, "%ld\n\n", size);
 	
 	// Salvando a primeira matriz no arquivo
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
-			fprintf(fp, "%d ", matrizA[i][j]);	
+			fprintf(fp, "%ld ", matrizA[i][j]);	
 		}
 		fprintf(fp, "\n");
 	}
@@ -56,7 +56,7 @@ int main() {
 	// Salvando a segunda matriz no arquivo
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
-			fprintf(fp, "%d ", matrizB[i][j]);	
+			fprintf(fp, "%ld ", matrizB[i][j]);	
 		}
 		fprintf(fp, "\n");
 	}
