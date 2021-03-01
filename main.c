@@ -163,10 +163,12 @@ int main()
 	// Alocando dinamicamente o tamanho das matrizes
 	matrixA = allocateMatrix(size);
 	matrixB = allocateMatrix(size);
-	matrizC = allocateMatrix(size);
 	
 	// Chamando a função para ler o conteúdo das matrizes no arquivo
 	readFile(matrixA,matrixB, size);
+	
+	// Alocando dinamicamente a matriz resultante
+	matrizC = allocateMatrix(size);
 
 	// Chamando a função para multiplicar as matrizes
 	multMatrix(matrixA, matrixB, matrizC, size);
@@ -183,7 +185,7 @@ int main()
 	// Exibindo o tempo de execução
 	printf("Tempo de Execucao: %.3lf s\n\n", timeSpent);
 	
-	// Libera a memória das matrizes
+	// Libera a memória da matriz
 	freeMatrix(matrixA, size);
 	freeMatrix(matrixB, size);
 	freeMatrix(matrizC, size);
