@@ -155,7 +155,7 @@ int main()
     // Declarando variáveis
     long int **matrixA, **matrixB, **matrizC;
     long int size;
-    double timeSpent;
+    double timeSpent, timeSpentFunction;
 	
 	// Chamando a função para a ler a quantidade de elementos das matrizes no arquivo
 	readFileToSize(&size);
@@ -169,9 +169,18 @@ int main()
 	
 	// Alocando dinamicamente a matriz resultante
 	matrizC = allocateMatrix(size);
+	
+	// Iniciando a contagem do tempo de execução da função de multiplicação
+	clock_t beginFunction = clock();
 
 	// Chamando a função para multiplicar as matrizes
 	multMatrix(matrixA, matrixB, matrizC, size);
+	
+	// Finalizando a contagem do tempo de execução da função de multiplicação
+	clock_t endFunction = clock();
+	
+	// Calculando o tempo de execução
+	timeSpentFunction = (double) (endFunction - beginFunction) / CLOCKS_PER_SEC;
 	
 	// Chamando a função para a escrita da matriz resultante no arquivo
 	writeFile(matrizC, size);
@@ -183,7 +192,10 @@ int main()
 	timeSpent = (double) (end - begin) / CLOCKS_PER_SEC;
 	
 	// Exibindo o tempo de execução
-	printf("Tempo de Execucao: %.3lf s\n\n", timeSpent);
+	printf("Tempo de Execucao da Multiplicacao: %.3lf s\n\n", timeSpentFunction);
+	
+	// Exibindo o tempo de execução
+	printf("Tempo de Execucao do Programa: %.3lf s\n\n", timeSpent);
 	
 	// Libera a memória da matriz
 	freeMatrix(matrixA, size);
