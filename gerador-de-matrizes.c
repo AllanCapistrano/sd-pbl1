@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include <locale.h>
+#include<time.h>
 
 int main() {
 	setlocale(LC_ALL, "Portuguese");
@@ -31,6 +32,9 @@ int main() {
 		matrizA[i] = malloc(size * sizeof(long int));
 		matrizB[i] = malloc(size * sizeof(long int));
 	}
+	
+	// Função para fazer com que os valores gerados não se repitam
+	srand(time(NULL));
 	
 	// Gerando os numéros aleatoriamente e salavndo nas matrizes
 	for (i = 0; i < size; i++) {
