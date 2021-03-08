@@ -18,7 +18,7 @@ int main() {
 	return 0;
 }
 
-/* Assembly inline básico */
+/* Assembly inline b?sico */
 asm(
 	"loop:\n"
 		"XOR    EAX, EAX\n"
