@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int basicMult(int a, int b, int c, int d);
 int sumLeaExtAsm(int x, int y);
 int mult(int x, int y, int z);
 int somaVetor(int *x, int *y);
 int acessandoMatriz(int **x, int **y);
 int loop();
 int nestedLoop();
+int threeLoop();
 
 int main() {
 	
@@ -75,7 +75,6 @@ int main() {
 //	c = acessandoMatriz(a, b);
 
 //	printf("\nSoma (lea) - Extended Asm: %d\n", sumLeaExtAsm(15, 2));
-//	printf("Multiplicacao Basica: %d\n", basicMult(1, 2, 3, 4));
 //	printf("Multiplicacao - Extended Asm: %d\n\n", mult(5, 10, 2));
 	
 //	printf("\n%d\n", z);
@@ -84,8 +83,10 @@ int main() {
 	
 //	printf("\nLopp: %d\n", loop());
 
-	printf("\nNested Lopp: %d\n", nestedLoop());
-//	
+//	printf("\nNested Lopp: %d\n", nestedLoop());
+	
+	printf("\nTres Loops: %d\n", threeLoop());
+	
 //	free(x);
 //	free(y);
 //	
@@ -100,16 +101,6 @@ int main() {
 //	system("pause");
 	return 0;
 }
-
-/* Assembly inline b?sico */
-asm(
-	"basicMult:\n"
-		"mov eax, ecx\n"
-		"imul eax, edx\n"
-		"imul eax, r8d\n"
-		"imul eax, r9d\n"
-		"ret"
-);
 
 /* Soma (lea) utilizando Extended Asm */
 int sumLeaExtAsm(int x, int y) {
@@ -222,12 +213,33 @@ int nestedLoop(){
 	return r;
 }
 
-//int somaVetor(int *x, int *y) {
-//	int r;
-//	
-//	r = x[0] + y[0];
-//	
-//	return r;
-//}
-
+int threeLoop(){
+	int r;
+	int i = -1, j = 0, k = 0, increment = 0, size = 5;
+	
+	asm(
+		"loop11:\n"
+			"inc %1\n"
+			"cmp %1, %5\n"
+			"jge end1\n"
+			"mov %2, 0\n"
+			"loop21:\n"
+				"cmp %2, %5\n"
+				"jge loop11\n"
+				"mov %3, 0\n"
+				"inc %2\n"
+				"loop31:\n"
+					"cmp %3, %5\n"
+					"jge loop21\n"
+					"inc %4\n"
+					"inc %3\n"
+					"jmp loop31\n"
+		"end1:\n"
+		"mov %[saida], %4\n"
+		:[saida] "=r" (r)
+		: "r" (i), "r" (j), "r" (k), "r" (increment), "r" (size)
+	);
+	
+	return r;
+}
 
