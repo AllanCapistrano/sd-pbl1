@@ -3,30 +3,30 @@
 #include <time.h>
 
 // Função para alocar dinamicamente o tamanho da matriz
-long int **allocateMatrix(long int size){
-  long int **matrix;
-  int i;
+int **allocateMatrix(int size){
+	int **matrix;
+	int i;
 
-  matrix = (long int**)malloc(sizeof(long int*) * size);
-  
-  if(matrix == NULL){
-    printf("Memoria insuficiente.\n");
-    exit(1);
-  }
-  
-  for(i = 0; i < size; i++){
-    matrix[i] = (long int *)malloc(sizeof(long int) * size);
-    if(matrix[i] == NULL){
-      printf("Memoria insuficiente.\n");
-      exit(1);
-    }
-  }
-  
-  return matrix;
+	matrix = (int**)malloc(sizeof(int*) * size);
+	
+	if(matrix == NULL){
+		printf("Memoria insuficiente.\n");
+		exit(1);
+	}
+	
+	for(i = 0; i < size; i++){
+		matrix[i] = (int *)malloc(sizeof(int) * size);
+		if(matrix[i] == NULL){
+			printf("Memoria insuficiente.\n");
+			exit(1);
+		}
+	}
+	
+	return matrix;
 }
 
 // Função para liberar o espaço na memória que foi alocado dinamicamente
-void freeMatrix(long int **matrix, long int size){
+void freeMatrix(int **matrix, int size){
   int i;
   for(i = 0; i < size; i++)
     free(matrix[i]);
@@ -34,9 +34,9 @@ void freeMatrix(long int **matrix, long int size){
 }
 
 // Função para a ler a quantidade de elementos das matrizes no arquivo
-void readFileToSize(long int *size){
+void readFileToSize(int *size){
 	FILE *file;
-	long int sizef;
+	int sizef;
 
 	// Abrindo o arquivo para a leitura
 	file = fopen("matrizes.txt", "r");
@@ -55,9 +55,9 @@ void readFileToSize(long int *size){
 }
 
 // Função para ler o conteúdo das matrizes no arquivo
-void readFile(long int **matrixA, long int **matrixB, long int size){
-	long int **matrixTemp, **matrixTemp2;
-	long int i,j;
+void readFile(int **matrixA, int **matrixB, int size){
+	int **matrixTemp, **matrixTemp2;
+	int i,j;
 	FILE *file;
  
 	// Abrindo o arquivo para a leitura
@@ -69,7 +69,7 @@ void readFile(long int **matrixA, long int **matrixB, long int size){
 	}
   
 	//Desloca o cursor à frente do arquivo de texto em número de bytes correspondente ao long int, partindo da posição atual.
-	fseek(file, +sizeof(long int), SEEK_CUR);
+	fseek(file, +sizeof(int), SEEK_CUR);
   
 	// Alocando dinamicamente as matrizes temporárias
 	matrixTemp = allocateMatrix(size);
@@ -99,35 +99,29 @@ void readFile(long int **matrixA, long int **matrixB, long int size){
 }
 
 // Função para realizar a multiplicação das matrizes
-void multMatrix(long int **matrixA, long int **matrixB, long int **matrizC, long int size) {
-	long int **matrixTemp;
-	long int aux = 0;
+int **multMatrix(int **matrixA, int **matrixB, int **matrixC, int size) {
+	int aux = 0;
 	int i, j, k;
-	
-	// Alocando dinamicamente a matriz temporária
-	matrixTemp = allocateMatrix(size);
 	
 	// Multiplicando as matrizes
 	for(i = 0; i < size; i++) {
 		for(j = 0; j < size; j++) {
-			matrixTemp[i][j] = 0;
+			matrixC[i][j] = 0;
 			
 			for(k = 0; k < size; k++) {
 				aux +=  matrixA[i][k] * matrixB[k][j];
 			}
 
-			matrixTemp[i][j] = aux;
-			matrizC[i][j] = matrixTemp[i][j];
+			matrixC[i][j] = aux;
 			aux = 0;
 		}
 	}
 	
-	// Liberando o espaço na memória que foi alocado dinamicamente
-	freeMatrix(matrixTemp, size);
+	return matrixC;
 }
 
 // Função para escrever no arquivo a matriz resultante
-void writeFile(long int **matrizC, long int size) {
+void writeFile(int **matrixC, int size) {
 	int i, j;
 	FILE *file2;
 	
@@ -137,7 +131,7 @@ void writeFile(long int **matrizC, long int size) {
 	// Escrevendo no arquivo a matriz resultante
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {	
-			fprintf(file2, "%ld ", matrizC[i][j]);
+			fprintf(file2, "%ld ", matrixC[i][j]);
 		}
 		
 		fprintf(file2, "\n");
@@ -153,8 +147,8 @@ int main()
 	clock_t begin = clock();
 	
     // Declarando variáveis
-    long int **matrixA, **matrixB, **matrizC;
-    long int size;
+    int **matrixA, **matrixB, **matrixC;
+    int size;
     double timeSpent, timeSpentFunction;
 	
 	// Chamando a função para a ler a quantidade de elementos das matrizes no arquivo
@@ -168,13 +162,13 @@ int main()
 	readFile(matrixA,matrixB, size);
 	
 	// Alocando dinamicamente a matriz resultante
-	matrizC = allocateMatrix(size);
+	matrixC = allocateMatrix(size);
 	
 	// Iniciando a contagem do tempo de execução da função de multiplicação
 	clock_t beginFunction = clock();
 
 	// Chamando a função para multiplicar as matrizes
-	multMatrix(matrixA, matrixB, matrizC, size);
+	matrixC = multMatrix(matrixA, matrixB, matrixC, size);
 	
 	// Finalizando a contagem do tempo de execução da função de multiplicação
 	clock_t endFunction = clock();
@@ -183,7 +177,7 @@ int main()
 	timeSpentFunction = (double) (endFunction - beginFunction) / CLOCKS_PER_SEC;
 	
 	// Chamando a função para a escrita da matriz resultante no arquivo
-	writeFile(matrizC, size);
+	writeFile(matrixC, size);
 	
 	// Finalizando a contagem do tempo de execução
 	clock_t end = clock();
@@ -200,7 +194,7 @@ int main()
 	// Libera a memória da matriz
 	freeMatrix(matrixA, size);
 	freeMatrix(matrixB, size);
-	freeMatrix(matrizC, size);
+	freeMatrix(matrixC, size);
 	
     system ("pause");
     return 0;
