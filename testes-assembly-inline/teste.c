@@ -74,9 +74,9 @@ int main() {
 //	
 //	c = acessandoMatriz(a, b);
 
-	printf("\nSoma (lea) - Extended Asm: %d\n", sumLeaExtAsm(15, 2));
-	printf("Multiplicacao Basica: %d\n", basicMult(1, 2, 3, 4));
-	printf("Multiplicacao - Extended Asm: %d\n\n", mult(5, 10, 2));
+//	printf("\nSoma (lea) - Extended Asm: %d\n", sumLeaExtAsm(15, 2));
+//	printf("Multiplicacao Basica: %d\n", basicMult(1, 2, 3, 4));
+//	printf("Multiplicacao - Extended Asm: %d\n\n", mult(5, 10, 2));
 	
 //	printf("\n%d\n", z);
 
@@ -84,7 +84,7 @@ int main() {
 	
 //	printf("\nLopp: %d\n", loop());
 
-//	printf("\nNested Lopp: %d\n", nestedLoop());
+	printf("\nNested Lopp: %d\n", nestedLoop());
 //	
 //	free(x);
 //	free(y);
@@ -101,7 +101,7 @@ int main() {
 	return 0;
 }
 
-/* Assembly inline básico */
+/* Assembly inline b?sico */
 asm(
 	"basicMult:\n"
 		"mov eax, ecx\n"
@@ -124,7 +124,7 @@ int sumLeaExtAsm(int x, int y) {
 	return r;
 }
 
-/* Multiplicação utilizando Extended Asm */
+/* Multiplica??o utilizando Extended Asm */
 int mult(int x, int y, int z) {
 	int r;
 	
@@ -140,7 +140,7 @@ int mult(int x, int y, int z) {
 }
 
 /* utilizando vetores */
-/* as posições do vetor são acessadas em 4 em 4, começando do 0*/
+/* as posi??es do vetor s?o acessadas em 4 em 4, come?ando do 0*/
 int somaVetor(int *x, int *y) {
 	int r, teste;
 	
@@ -155,8 +155,8 @@ int somaVetor(int *x, int *y) {
 	return r;
 }
 
-/* Para acessar a matriz você primeiro move a linha para um registrador (multiplos de 8), 
-e depois no mesmo registrador você acessa as colunas (multiplos de 4)
+/* Para acessar a matriz voc? primeiro move a linha para um registrador (multiplos de 8), 
+e depois no mesmo registrador voc? acessa as colunas (multiplos de 4)
 */
 /* Exemplo Matriz 2x2, acessando a linha 1 coluna 2:
 	"mov %3, [%1 + 0]\n"
@@ -167,7 +167,7 @@ int acessandoMatriz(int **x, int **y){
 	int **tempMatrix;
 	
 	asm(
-		"mov %4, %1\n"     // Move o contéudo da matriz x para tempMatrix
+		"mov %4, %1\n"     // Move o cont?udo da matriz x para tempMatrix
 		"mov %1, 1\n"     // Atribui 1 para x
 		"mov %3, [%4 + %1*8]\n"  // Acessa a segunda linha da primeira matriz
 		"mov %[saida], [%3 + 4]\n" //Acessa a segunda coluna da primeira matriz
@@ -197,26 +197,30 @@ int loop(){
 	return r;
 }
 
-//int nestedLoop(){
-//	int r, i, j;
-//	
-//	asm(
-//		"mov %[saida], 100\n"
-//		"OuterLoop:"
-//			"mov %1, 500\n"
-//		"InnerLoop:\n"
-//			"inc %2\n"
-//			"dec %1\n"
-//			"jnz InnerLoop\n"
-//			
-//			"dec %[saida]\n"
-//			"jnz OuterLoop\n"
-//		:[saida] "=r" (r)
-//		: "r" (i), "r" (j)
-//	);
-//	
-//	return r;
-//}
+int nestedLoop(){
+	int r;
+	int i = -1, j = 0, increment = 0, size = 10;
+	
+	asm(
+		"loop1:\n"
+			"inc %1\n"
+			"cmp %1, %4\n"
+			"jge end\n"
+			"mov %2, 0\n"
+			"loop2:\n"
+				"cmp %2, %4\n"
+				"jge loop1\n"
+				"inc %3\n"
+				"inc %2\n"
+				"jmp loop2\n"
+		"end:\n"
+		"mov %[saida], %3\n"
+		:[saida] "=r" (r)
+		: "r" (i), "r" (j), "r" (increment), "r" (size)
+	);
+	
+	return r;
+}
 
 //int somaVetor(int *x, int *y) {
 //	int r;
