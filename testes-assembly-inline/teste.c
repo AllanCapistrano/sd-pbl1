@@ -65,15 +65,15 @@ int main() {
 //	z[2] = 28;
 //	z[3] = 31;
 //	
-	a[0][0] = 100;
-	a[0][1] = 25;
+	a[0][0] = 1;
+	a[0][1] = 2;
 	a[1][0] = 3;
-	a[1][1] = 22;
+	a[1][1] = 4;
 
-	b[0][0] = 11;
-	b[0][1] = 6;
-	b[1][0] = 7;
-	b[1][1] = 8;
+	b[0][0] = 4;
+	b[0][1] = 3;
+	b[1][0] = 2;
+	b[1][1] = 1;
 //	
 //	z = somaVetor(x, y);
 //	
@@ -318,6 +318,7 @@ int threeLoopArray(int ** x, int ** y, int ** z, int size){
 			"laco2:\n"
 				"cmp %[j], %[size]\n"
 				"jge laco1\n"
+				//result = 0
 				"mov %[k], 0\n"
 				"inc %[j]\n"
 				"mov %[inc3], -1\n"
@@ -325,31 +326,33 @@ int threeLoopArray(int ** x, int ** y, int ** z, int size){
 				"laco3:\n"
 					"cmp %[k], %[size]\n"
 				
-					"jge laco2\n"
+					"jge laco2\n" //atribuicao
 					"inc %[inc3]\n"
 					
-					"mov %[temp1M1], [%[x] + %[inc3]*8]\n"  // Acessa a segunda linha da primeira matriz
-					"mov %[temp2M1], [%[temp1M1] + %[k]*4]\n" //Acessa a segunda coluna da primeira matriz
+					"mov %[temp1M1], [%[x] + %[inc1]*8]\n"  
+					"mov %[temp2M1], [%[temp1M1] + %[k]*4]\n" 
 					
-					"mov %[temp1M2], [%[y] + %[inc3]*8]\n"  // Acessa a segunda linha da primeira matriz
-					"mov %[temp2M2], [%[temp1M2] + %[k]*4]\n" //Acessa a segunda coluna da primeira matriz
+					"mov %[temp1M2], [%[y] + %[inc1]*8]\n"  
+					"mov %[temp2M2], [%[temp1M2] + %[k]*4]\n" 
 					
 					"imul %[temp2M2], %[temp2M1]\n"
+					"add %[result], %[temp2M2]\n"
 					
 					
 					"inc %[k]\n"
-					"jmp atribuicao\n"
+					"jmp atribuicao\n" //laco3
 				"atribuicao:\n"
-					
-					"jmp laco3\n"
+					//"mov matrizC, %[result]\n"
+					"jmp laco3\n" //laco2
 				
 		"final:\n"
-		"mov %[saida], %[temp2M2]\n"
-		:[saida] "=r" (r)
+		"mov %[saida], %[result]\n"
+		: [saida] "=r" (r)
 		: [x] "r" (x), [y] "r" (y), [z] "r" (z),
-		 [inc1] "r" (inc1), [inc2] "r" (inc2), [inc3] "r" (inc3),
+		  [inc1] "r" (inc1), [inc2] "r" (inc2), [inc3] "r" (inc3),
 		  [i] "r" (i), [j] "r" (j), [k] "r" (k), [size] "r" (size),
-		[temp1M1] "r" (temp1M1), [temp2M1] "r" (temp2M1), [temp1M2] "r" (temp1M2), [temp2M2] "r" (temp2M2)
+		  [temp1M1] "r" (temp1M1), [temp2M1] "r" (temp2M1), [temp1M2] "r" (temp1M2), [temp2M2] "r" (temp2M2),
+		  [result] "m" (result), [temp1M3] "m" (temp1M3)
 	);
 	
 	return r;
