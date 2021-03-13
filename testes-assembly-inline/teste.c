@@ -15,14 +15,15 @@ int loop();
 int nestedLoop();
 int threeLoop();
 int arrayLoop(int * x, int * y);
-int threeLoopArray(int ** x, int ** y, int ** z, int size);
+int **threeLoopArray(int ** x, int ** y, int ** z, int size);
 
 int main() {
 	
 //	int *x;
 //	int *y;
 //	int *z;
-	int **a, **b, **c;
+	int **a, **b;
+	int **c;
 //	int z, c;
 	int i;
 //	
@@ -32,7 +33,7 @@ int main() {
 //	
 	a = (int**)malloc(sizeof(int*) * 2);
 	b = (int**)malloc(sizeof(int*) * 2);
-	c = (int**)malloc(sizeof(int*) * 2);
+//	c = (int**)malloc(sizeof(int*) * 2);
 //
 //	for(i = 0; i < 3; i++){
 //	    a[i] = (int *)malloc(sizeof(int) * 3);
@@ -46,7 +47,7 @@ int main() {
 	for(i = 0; i < 2; i++){
 		a[i] = (int *)malloc(sizeof(int) * 2);
 	    b[i] = (int *)malloc(sizeof(int) * 2);
-	    c[i] = (int *)malloc(sizeof(int) * 2);
+//	    c[i] = (int *)malloc(sizeof(int) * 2);
 	    
 	}
 	
@@ -93,8 +94,10 @@ int main() {
 //	printf("\nTres Loops: %d\n", threeLoop());
 	
 //	printf("\narrayLoop: %d\n", arrayLoop(x, y));
+
+	c = threeLoopArray(a, b, c, 2);
 	
-	printf("\n%d\n", threeLoopArray(a, b, c, 2));
+	printf("\n%d\n", c[0][0]);
 //	free(x);
 //	free(y);
 //	free(z);
@@ -102,12 +105,12 @@ int main() {
 	for(i = 0; i < 2; i++){
 		free(a[i]);
 		free(b[i]);
-		free(c[i]);
+//		free(c[i]);
 	}
 		
 	free(a);
 	free(b);
-	free(c);
+//	free(c);
 	
 //	system("pause");
 	return 0;
@@ -298,7 +301,7 @@ int arrayLoop(int * x, int * y){
 	return r;
 }
 
-int threeLoopArray(int ** x, int ** y, int ** z, int size){
+int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 	int r;
 	int i = -1, j = 0, k = 0, result = 0;
 	int temp1M1, temp2M1, temp1M2, temp2M2, temp1M3, temp2M3;
@@ -326,7 +329,9 @@ int threeLoopArray(int ** x, int ** y, int ** z, int size){
 				"laco3:\n"
 					"cmp %[k], %[size]\n"
 				
-					"jge laco2\n" //atribuicao
+					//"jge laco2\n" //atribuicao
+					"jge atribuicao\n"
+					
 					"inc %[inc3]\n"
 					
 					"mov %[temp1M1], [%[x] + %[inc1]*8]\n"  
@@ -340,20 +345,24 @@ int threeLoopArray(int ** x, int ** y, int ** z, int size){
 					
 					
 					"inc %[k]\n"
-					"jmp atribuicao\n" //laco3
+					//"jmp atribuicao\n" //laco3
+					"jmp laco3\n"
 				"atribuicao:\n"
 					//"mov matrizC, %[result]\n"
-					"jmp laco3\n" //laco2
+					//"jmp laco3\n" //laco2
+					"jmp laco2\n" //
 				
 		"final:\n"
 		"mov %[saida], %[result]\n"
 		: [saida] "=r" (r)
-		: [x] "r" (x), [y] "r" (y), [z] "r" (z),
+		: [x] "r" (x), [y] "r" (y),
 		  [inc1] "r" (inc1), [inc2] "r" (inc2), [inc3] "r" (inc3),
 		  [i] "r" (i), [j] "r" (j), [k] "r" (k), [size] "r" (size),
 		  [temp1M1] "r" (temp1M1), [temp2M1] "r" (temp2M1), [temp1M2] "r" (temp1M2), [temp2M2] "r" (temp2M2),
-		  [result] "m" (result), [temp1M3] "m" (temp1M3)
+		  [result] "m" (result), [temp1M3] "r" (temp1M3)
 	);
 	
-	return r;
+	x = y;
+	
+	return x;
 }
