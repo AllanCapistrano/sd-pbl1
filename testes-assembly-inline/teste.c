@@ -302,10 +302,18 @@ int arrayLoop(int * x, int * y){
 }
 
 int **threeLoopArray(int ** x, int ** y, int ** z, int size){
-	int r;
+	int **r;
 	int i = -1, j = 0, k = 0, result = 0;
 	int temp1M1, temp2M1, temp1M2, temp2M2, temp1M3, temp2M3;
 	int * inc1, *inc2, *inc3;
+	int **matrixTemp;
+	
+	matrixTemp = (int**)malloc(sizeof(int*) * size);
+
+	for(int m = 0; m < size; m++){
+		matrixTemp[m] = (int *)malloc(sizeof(int) * size);
+	    
+	}
 	
 	asm(
 		"multplex:\n"
@@ -349,20 +357,32 @@ int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 					"jmp laco3\n"
 				"atribuicao:\n"
 					//"mov matrizC, %[result]\n"
+					"mov %[temp1M2], %[result]\n"
+					"mov %[temp1M1], [%[matrixTemp] + %[inc1]*8]\n"
+					"mov [%[temp1M1] + %[j]*4],  %[temp1M2]\n"
+					
 					//"jmp laco3\n" //laco2
 					"jmp laco2\n" //
 				
 		"final:\n"
-		"mov %[saida], %[result]\n"
-		: [saida] "=r" (r)
+		"mov %[saida], %[x]\n"
+		: [saida] "=r" (r), [temp2M3] "=r" (temp2M3)
 		: [x] "r" (x), [y] "r" (y),
 		  [inc1] "r" (inc1), [inc2] "r" (inc2), [inc3] "r" (inc3),
 		  [i] "r" (i), [j] "r" (j), [k] "r" (k), [size] "r" (size),
 		  [temp1M1] "r" (temp1M1), [temp2M1] "r" (temp2M1), [temp1M2] "r" (temp1M2), [temp2M2] "r" (temp2M2),
-		  [result] "m" (result), [temp1M3] "r" (temp1M3)
+		  [result] "m" (result), [matrixTemp] "r" (matrixTemp)
 	);
 	
 	x = y;
+	
+	printf("\nOpa: %d\n", r[0][0]);
+	
+	for(int m = 0; m < size; m++){
+		free(matrixTemp[m]);
+	}
+		
+	free(matrixTemp);
 	
 	return x;
 }
