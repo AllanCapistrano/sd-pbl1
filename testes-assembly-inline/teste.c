@@ -15,7 +15,7 @@ int loop();
 int nestedLoop();
 int threeLoop();
 int arrayLoop(int * x, int * y);
-int **threeLoopArray(int ** x, int ** y, int ** z, int size);
+int threeLoopArray(int ** x, int ** y, int ** z, int size);
 
 int main() {
 	
@@ -26,13 +26,14 @@ int main() {
 	int **c;
 //	int z, c;
 	int i;
+	int size = 3;
 //	
 //	x = (int*)malloc(sizeof(int) * 4);
 //	y = (int*)malloc(sizeof(int) * 4);
 //	z = (int*)malloc(sizeof(int) * 4);
 //	
-	a = (int**)malloc(sizeof(int*) * 2);
-	b = (int**)malloc(sizeof(int*) * 2);
+	a = (int**)malloc(sizeof(int*) * size);
+	b = (int**)malloc(sizeof(int*) * size);
 //	c = (int**)malloc(sizeof(int*) * 2);
 //
 //	for(i = 0; i < 3; i++){
@@ -44,9 +45,9 @@ int main() {
 //	    }
 //	  }
 //	  
-	for(i = 0; i < 2; i++){
-		a[i] = (int *)malloc(sizeof(int) * 2);
-	    b[i] = (int *)malloc(sizeof(int) * 2);
+	for(i = 0; i < size; i++){
+		a[i] = (int *)malloc(sizeof(int) * size);
+	    b[i] = (int *)malloc(sizeof(int) * size);
 //	    c[i] = (int *)malloc(sizeof(int) * 2);
 	    
 	}
@@ -68,13 +69,23 @@ int main() {
 //	
 	a[0][0] = 1;
 	a[0][1] = 2;
-	a[1][0] = 3;
-	a[1][1] = 4;
+	a[0][2] = 3;
+	a[1][0] = 4;
+	a[1][1] = 5;
+	a[1][2] = 6;
+	a[2][0] = 7;
+	a[2][1] = 8;
+	a[2][2] = 9;
 
-	b[0][0] = 4;
-	b[0][1] = 3;
-	b[1][0] = 2;
-	b[1][1] = 1;
+	b[0][0] = 9;
+	b[0][1] = 8;
+	b[0][2] = 7;
+	b[1][0] = 6;
+	b[1][1] = 5;
+	b[1][2] = 4;
+	b[2][0] = 3;
+	b[2][1] = 2;
+	b[2][2] = 1;
 //	
 //	z = somaVetor(x, y);
 //	
@@ -95,14 +106,14 @@ int main() {
 	
 //	printf("\narrayLoop: %d\n", arrayLoop(x, y));
 
-	c = threeLoopArray(a, b, c, 2);
+//	c = threeLoopArray(a, b, c, 2);
 	
-	printf("\n%d\n", c[0][0]);
+	printf("\n%d\n", threeLoopArray(a, b, c, size));
 //	free(x);
 //	free(y);
 //	free(z);
 //	
-	for(i = 0; i < 2; i++){
+	for(i = 0; i < size; i++){
 		free(a[i]);
 		free(b[i]);
 //		free(c[i]);
@@ -301,10 +312,10 @@ int arrayLoop(int * x, int * y){
 	return r;
 }
 
-int **threeLoopArray(int ** x, int ** y, int ** z, int size){
-	int **r;
+int threeLoopArray(int ** x, int ** y, int ** z, int size){
+	int r, **temp2M3;
 	int i = -1, j = 0, k = 0, result = 0;
-	int temp1M1, temp2M1, temp1M2, temp2M2, temp1M3, temp2M3;
+	int temp1M1, temp2M1, temp1M2, temp2M2, temp1M3;
 	int * inc1, *inc2, *inc3;
 	int **matrixTemp;
 	
@@ -312,7 +323,6 @@ int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 
 	for(int m = 0; m < size; m++){
 		matrixTemp[m] = (int *)malloc(sizeof(int) * size);
-	    
 	}
 	
 	asm(
@@ -324,16 +334,15 @@ int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 			"cmp %[i], %[size]\n"
 			"jge final\n"
 			"inc %[inc1]\n"
-			"mov %[inc2], -1\n"
+			"mov %[inc2], 0\n"
 			"mov %[j], 0\n"
 			"laco2:\n"
 				"cmp %[j], %[size]\n"
 				"jge laco1\n"
 				//result = 0
+				"mov %[result], 0\n"
 				"mov %[k], 0\n"
-				"inc %[j]\n"
 				"mov %[inc3], -1\n"
-				"inc %[inc2]\n"
 				"laco3:\n"
 					"cmp %[k], %[size]\n"
 				
@@ -345,8 +354,8 @@ int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 					"mov %[temp1M1], [%[x] + %[inc1]*8]\n"  
 					"mov %[temp2M1], [%[temp1M1] + %[k]*4]\n" 
 					
-					"mov %[temp1M2], [%[y] + %[inc1]*8]\n"  
-					"mov %[temp2M2], [%[temp1M2] + %[k]*4]\n" 
+					"mov %[temp1M2], [%[y] + %[inc3]*8]\n"  
+					"mov %[temp2M2], [%[temp1M2] + %[j]*4]\n" 
 					
 					"imul %[temp2M2], %[temp2M1]\n"
 					"add %[result], %[temp2M2]\n"
@@ -357,15 +366,18 @@ int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 					"jmp laco3\n"
 				"atribuicao:\n"
 					//"mov matrizC, %[result]\n"
-					"mov %[temp1M2], %[result]\n"
-					"mov %[temp1M1], [%[matrixTemp] + %[inc1]*8]\n"
-					"mov [%[temp1M1] + %[j]*4],  %[temp1M2]\n"
+//					"mov %[temp1M2], %[result]\n"
+//					"mov %[temp1M1], [%[matrixTemp] + %[inc1]*8]\n"
+//					"mov [%[temp1M1] + %[j]*4],  %[temp1M2]\n"
+
+					"inc %[j]\n"
+					"inc %[inc2]\n"
 					
 					//"jmp laco3\n" //laco2
 					"jmp laco2\n" //
 				
 		"final:\n"
-		"mov %[saida], %[x]\n"
+		"mov %[saida], %[result]\n"
 		: [saida] "=r" (r), [temp2M3] "=r" (temp2M3)
 		: [x] "r" (x), [y] "r" (y),
 		  [inc1] "r" (inc1), [inc2] "r" (inc2), [inc3] "r" (inc3),
@@ -374,9 +386,9 @@ int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 		  [result] "m" (result), [matrixTemp] "r" (matrixTemp)
 	);
 	
-	x = y;
+//	x = y;
 	
-	printf("\nOpa: %d\n", r[0][0]);
+//	printf("\nOpa: %d\n", r[0][0]);
 	
 	for(int m = 0; m < size; m++){
 		free(matrixTemp[m]);
@@ -384,5 +396,5 @@ int **threeLoopArray(int ** x, int ** y, int ** z, int size){
 		
 	free(matrixTemp);
 	
-	return x;
+	return r;
 }
