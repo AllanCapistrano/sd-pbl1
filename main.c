@@ -58,7 +58,7 @@ void readFileToSize(int *size){
 	}
   
 	// Salvando a dimensão das matrizes a partir do arquivo
-	fscanf(file,"%ld",&sizef);
+	fscanf(file,"%d",&sizef);
 	*size = sizef;
 
 	// Fechando o arquivo 
@@ -89,14 +89,14 @@ void readFile(int **matrixA, int **matrixB, int size){
 	// Salvando o conteúdo das matrizes a partir do arquivo
 	for(i = 0; i < size; i++){
 		for(j = 0; j < size; j++){
-		  fscanf(file,"%ld",&matrixTemp[i][j]);
+		  fscanf(file,"%d",&matrixTemp[i][j]);
 		  matrixA[i][j] = matrixTemp[i][j];
 		}
 	}
 	
 	for(i = 0; i < size; i++){
 		for(j = 0; j < size; j++){
-		  fscanf(file,"%ld",&matrixTemp2[i][j]);
+		  fscanf(file,"%d",&matrixTemp2[i][j]);
 		  matrixB[i][j] = matrixTemp2[i][j];
 		}
 	}
@@ -142,7 +142,7 @@ void writeFile(int **matrixC, int size) {
 	// Escrevendo no arquivo a matriz resultante
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {	
-			fprintf(file2, "%ld ", matrixC[i][j]);
+			fprintf(file2, "%d ", matrixC[i][j]);
 		}
 		
 		fprintf(file2, "\n");
