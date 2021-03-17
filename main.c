@@ -207,6 +207,5 @@ int main()
 	freeMatrix(matrixB, size);
 	freeMatrix(matrixC, size);
 	
-    system ("pause");
     return 0;
 }

@@ -88,6 +88,5 @@ int main() {
 	// Fechando o arquivo de escrita
 	fclose(fp);
 	
-	system ("pause");
     return 0;
 }
