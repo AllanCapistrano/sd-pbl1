@@ -1,3 +1,14 @@
+/*********************************************************************************************
+Autores: Allan Capistrano de Santana Santos e João Erick Barbosa Teixeira da Silva
+Componente Curricular: MI - Sistemas Digitais
+Concluido em: 10/03/2021
+Declaramos que este código foi elaborado por nós de forma individual e não contém nenhum
+trecho de código de outro colega ou de outro autor, tais como provindos de livros e
+apostilas, e páginas ou documentos eletrônicos da Internet. Qualquer trecho de código
+de outra autoria que não a nossa está destacado com uma citação para o autor e a fonte
+do código, e estamos cientes que estes trechos não serão considerados para fins de avaliação.
+***********************************************************************************************/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include <time.h>
