@@ -195,7 +195,7 @@ void writeFile(int **matrixC, int size) {
 	FILE *file2;
 	
 	// Abrindo o arquivo para as escrita da matriz resultante
-	file2 = fopen("matriz-resultante.txt", "w");
+	file2 = fopen("matriz-resultante-asm.txt", "w");
 	
 	// Escrevendo no arquivo a matriz resultante
 	for (i = 0; i < size; i++) {
@@ -268,10 +268,10 @@ int main()
 	timeSpent = (double) (end - begin) / CLOCKS_PER_SEC;
 	
 	// Exibindo o tempo de execução
-	printf("Tempo de Execucao da Multiplicacao: %.3lf s\n\n", timeSpentFunction);
+	printf("Tempo de Execucao da Multiplicacao: %.5lf s\n\n", timeSpentFunction);
 	
 	// Exibindo o tempo de execução
-	printf("Tempo de Execucao do Programa: %.3lf s\n\n", timeSpent);
+	printf("Tempo de Execucao do Programa: %.5lf s\n\n", timeSpent);
 	
 	// Libera a memória da matriz
 	freeMatrix(matrixA, size);
@@ -281,6 +281,5 @@ int main()
 	// Liberar a memória do vetor temporário
 	free(arrayTemp);
 	
-    system ("pause");
     return 0;
 }
