@@ -44,7 +44,7 @@ void freeMatrix(int **matrix, int size){
   free(matrix);
 }
 
-// Função para a ler a quantidade de elementos das matrizes no arquivo
+// Função para a ler a quantidade de linhas e colunas das matrizes no arquivo
 void readFileToSize(int *size){
 	FILE *file;
 	int sizef;
