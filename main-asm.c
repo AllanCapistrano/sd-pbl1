@@ -268,10 +268,10 @@ int main()
 	timeSpent = (double) (end - begin) / CLOCKS_PER_SEC;
 	
 	// Exibindo o tempo de execução
-	printf("Tempo de Execucao da Multiplicacao: %.5lf s\n\n", timeSpentFunction);
+	printf("Tempo de Execucao da Multiplicacao: %.6lf s\n\n", timeSpentFunction);
 	
 	// Exibindo o tempo de execução
-	printf("Tempo de Execucao do Programa: %.5lf s\n\n", timeSpent);
+	printf("Tempo de Execucao do Programa: %.6lf s\n\n", timeSpent);
 	
 	// Libera a memória da matriz
 	freeMatrix(matrixA, size);
