@@ -1,7 +1,7 @@
 # SD-PBL1
 
 ## 📚 Descrição ##
-Repositório para o primeiro problema do MI - Sistemas Digistais
+Repositório para o primeiro problema do MI - Sistemas Digistais - [Universidade Estadual de Feira de Santana (UEFS)](https://www.uefs.br/)
 
 **🔗 Tecnologias utilizadas:**
 - [Linguagem C](https://pt.wikipedia.org/wiki/C_(linguagem_de_programação))
